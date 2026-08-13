@@ -1,0 +1,103 @@
+.blog {
+    min-height: 100vh;
+    color: #f5f5f5;
+    display: grid;
+    grid-template-columns: clamp(72px, 9vw, 144px) 1fr;
+    padding: 48px 48px 96px 0;
+}
+
+/* ── Sidebar ───────────────────────────────────────────── */
+
+.blog-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 0 0 clamp(20px, 2.5vw, 40px);
+    position: sticky;
+    top: 48px;
+    align-self: start;
+}
+
+.blog-date-btn {
+    appearance: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(245, 245, 245, 0.28);
+    font-family: "Switzer-Regular", Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    letter-spacing: -0.01em;
+    padding: 4px 0;
+    text-align: left;
+    transition: color 0.2s;
+    line-height: 1.3;
+}
+
+.blog-date-btn--active {
+    color: #f5f5f5;
+    font-weight: 700;
+}
+
+.blog-date-btn:hover:not(.blog-date-btn--active) {
+    color: rgba(245, 245, 245, 0.6);
+}
+
+/* ── Article ───────────────────────────────────────────── */
+
+.blog-article {
+    min-width: 0;
+}
+
+.blog-article-header {
+    margin-bottom: 36px;
+}
+
+.blog-article-title {
+    font-family: "Gambarino", Georgia, serif;
+    font-size: clamp(72px, 10vw, 148px);
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: #f5f5f5;
+    margin: 0 0 14px;
+}
+
+.blog-article-meta {
+    font-family: "Switzer-Regular", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: rgba(245, 245, 245, 0.5);
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.blog-article-body {
+    max-width: 620px;
+}
+
+.blog-article-body p {
+    font-family: "Switzer-Regular", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.75;
+    color: rgba(245, 245, 245, 0.75);
+    margin: 0 0 18px;
+    hyphens: auto;
+}
+
+.blog-article-body h2 {
+    font-family: "Gambarino", Georgia, serif;
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 400;
+    color: #f5f5f5;
+    margin: 36px 0 12px;
+    letter-spacing: -0.03em;
+}
+
+.blog-article-body h3 {
+    font-family: "Switzer-Regular", Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(245, 245, 245, 0.5);
+    margin: 28px 0 8px;
+}

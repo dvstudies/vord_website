@@ -1,0 +1,44 @@
+.main-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    background: #050505;
+}
+
+.nav-btn {
+    appearance: none;
+    background: none;
+    border: none;
+    color: #f5f5f5;
+    font-family: "Switzer-Regular", Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    padding: 22px 26px;
+    cursor: pointer;
+    position: relative;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+}
+
+.nav-btn::after {
+    content: "";
+    position: absolute;
+    bottom: 15px;
+    left: 26px;
+    right: 26px;
+    height: 1px;
+    background: #f5f5f5;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.nav-btn--active::after {
+    opacity: 1;
+}
+
+.nav-btn:hover:not(.nav-btn--active) {
+    opacity: 0.55;
+}

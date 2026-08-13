@@ -1,0 +1,57 @@
+/* Top-left attribution */
+.brand-attribution {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    color: #fff;
+    /* mix-blend-mode: difference; */
+    pointer-events: none;
+    user-select: none;
+    transition: opacity 0.1s linear;
+}
+
+.brand-attribution span {
+    font-family: "Switzer-Regular", Arial, Helvetica, sans-serif;
+    font-size: clamp(10px, 1.1vw, 14px);
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+}
+
+/* Centred wordmark */
+.brand {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 2;
+    width: min-content;
+    color: #fff;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    user-select: none;
+    mix-blend-mode: difference;
+    transition: opacity 0.1s linear;
+}
+
+.brand h1 {
+    margin: 0;
+    font-family: "Gambarino", Georgia, serif;
+    font-size: clamp(118px, 24vw, 300px);
+    line-height: 0.76;
+    font-weight: 400;
+    letter-spacing: -0.075em;
+    color: #fff;
+}
+
+.brand p {
+    width: max-content;
+    margin: 0.5rem 0 0 auto;
+    font-family: "Switzer-Regular", Arial, Helvetica, sans-serif;
+    font-size: clamp(12px, 1.55vw, 22px);
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+}

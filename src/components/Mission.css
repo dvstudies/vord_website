@@ -1,0 +1,48 @@
+.mission {
+    min-height: 100vh;
+    padding: 96px 0 120px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.mission-body {
+    padding-left: clamp(80px, 11vw, 160px);
+    max-width: 760px;
+}
+
+.mission-body h1 {
+    font-family: "Gambarino", Georgia, serif;
+    font-size: clamp(64px, 9vw, 128px);
+    font-weight: 400;
+    line-height: 0.94;
+    letter-spacing: -0.04em;
+    color: #050505;
+    margin: 0 0 48px;
+}
+
+.mission-body h2 {
+    font-family: "Gambarino", Georgia, serif;
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    color: #050505;
+    margin: 40px 0 16px;
+}
+
+.mission-body p {
+    font-family: "Switzer-Regular", Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.68;
+    color: #1a1a1a;
+    max-width: 600px;
+    margin: 0 0 20px;
+    hyphens: auto;
+}
+
+.mission-body hr {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+    margin: 40px 0;
+    max-width: 600px;
+}
