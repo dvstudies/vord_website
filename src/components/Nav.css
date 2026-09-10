@@ -5,6 +5,7 @@
     z-index: 100;
     display: flex;
     background: #050505;
+    height: var(--grid-size);
 }
 
 .nav-btn {
