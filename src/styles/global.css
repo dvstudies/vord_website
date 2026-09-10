@@ -1,12 +1,9 @@
 :root {
     --smoke-white: #f5f5f5;
     --ink: #050505;
-    /* Fallback values for first paint, before Grid.jsx measures the
-       viewport and overwrites these via computeGridMetrics(). Every grid
-       on the site (the landing canvas + these CSS background grids) reads
-       from these two vars so they always stay in sync. */
     --grid-size: 72px;
     --grid-offset-x: 0px;
+    --grid-main-off-x: 0px;
 }
 
 *,
@@ -28,11 +25,6 @@ body {
     cursor: crosshair;
     overflow-x: hidden;
     overflow-y: scroll;
-    scrollbar-width: none; /* Firefox */
-}
-
-body::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
 }
 
 #root {
@@ -55,30 +47,22 @@ body::-webkit-scrollbar {
 .section {
     width: 100%;
     pointer-events: auto;
+    box-shadow: 0px -5px 50px rgba(0, 0, 0, 0.2);
 }
 
-/* Landing — transparent spacer, canvas shows through */
 .section--landing {
     height: 100dvh;
     background: transparent;
     pointer-events: none;
 }
 
-/* Mission, Blog, About stick to the top of the viewport instead of
-   scrolling away, so each next section slides up and covers the one
-   before it — scrolling through overlapping cards rather than one long
-   page. (Content taller than one viewport will be clipped while its
-   section is pinned, since sticky doesn't add its own scroll.) */
-.section--mission,
-.section--blog,
-.section--about {
+.section--sticky {
     position: sticky;
     top: 0;
     min-height: 100dvh;
 }
 
-/* Mission — smoke-white with grid lines */
-.section--mission {
+.section--w {
     background-color: var(--smoke-white);
     background-image:
         linear-gradient(rgba(0, 0, 0, 0.14) 1px, transparent 1px),
@@ -87,9 +71,7 @@ body::-webkit-scrollbar {
     background-position: var(--grid-offset-x) 0;
 }
 
-/* Blog & About — ink-black with subtle grid */
-.section--blog,
-.section--about {
+.section--b {
     background-color: var(--ink);
     background-image:
         linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),

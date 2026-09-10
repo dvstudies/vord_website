@@ -2,6 +2,7 @@
 date: 2026-05-26
 title: First Workshop
 location: University of Zurich, Zurich
+participants: []
 ---
 
 The first VORD workshop brought together researchers, curators, and digital humanists from across Europe to explore shared challenges in visual data publication.

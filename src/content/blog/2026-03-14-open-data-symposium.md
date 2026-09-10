@@ -2,6 +2,7 @@
 date: 2026-03-14
 title: Open Data Symposium
 location: Kunsthaus Zürich, Zurich
+participants: []
 ---
 
 In March, members of the VORD team participated in a broader symposium on open data practices in cultural heritage institutions, hosted at the Kunsthaus Zürich.

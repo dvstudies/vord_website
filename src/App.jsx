@@ -64,27 +64,20 @@ export default function App() {
         document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     }
 
-    // Canvas fades as user scrolls past landing
     const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-    const canvasOpacity = Math.max(0, 1 - scrollY / (vh * 0.7));
-    // Brand fades out faster
-    const brandOpacity = Math.max(0, 1 - scrollY / (vh * 0.35));
+    const canvasOpacity = Math.max(0.2, 1 - scrollY / (vh * 0.7));
+    const brandOpacity = Math.max(0.2, 1 - scrollY / (vh * 0.35));
 
     return (
         <div className="app">
-            {/* Fixed background canvas — shows its own loading fx until
-                the artwork is ready, then reveals it and calls onLoaded */}
             <Grid
                 artwork={artwork}
                 opacity={canvasOpacity}
                 onLoaded={() => setLoaded(true)}
             />
 
-            {/* Fixed brand — fades on scroll, visible from the very start */}
             <Brand opacity={brandOpacity} />
 
-            {/* Everything else stays out of the page until the grid is
-                ready, so the first thing shown is only the grid + brand. */}
             {loaded && (
                 <>
                     <Nav
@@ -100,21 +93,21 @@ export default function App() {
 
                         <section
                             id="mission"
-                            className="section section--mission"
+                            className="section section--sticky section--w"
                         >
                             <Mission />
                         </section>
 
                         <section
                             id="blog"
-                            className="section section--blog"
+                            className="section section--sticky section--b"
                         >
                             <Blog />
                         </section>
 
                         <section
                             id="about"
-                            className="section section--about"
+                            className="section section--sticky section--b"
                         >
                             <About />
                         </section>

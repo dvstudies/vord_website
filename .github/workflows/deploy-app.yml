@@ -1,3 +1,5 @@
+# to make this workflow work set Settings/Pages/Build and Deployment/Source to  GITHUB ACTIONS
+
 name: Build and Deploy to GitHub Pages
 
 on:
