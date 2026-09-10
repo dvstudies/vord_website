@@ -1,4 +1,5 @@
 .blog {
+    position: relative;
     min-height: 100vh;
     color: #f5f5f5;
     display: grid;
@@ -100,4 +101,29 @@
     text-transform: uppercase;
     color: rgba(245, 245, 245, 0.5);
     margin: 28px 0 8px;
+}
+
+/* ── Post image ────────────────────────────────────────── */
+
+.blog-image {
+    position: absolute;
+    right: 48px;
+    bottom: 48px;
+    width: min(34vw, 480px);
+    background: rgba(245, 245, 245, 0.03);
+    /* border: 1px solid rgba(245, 245, 245, 0.18); */
+    padding: 8px;
+    pointer-events: none;
+}
+
+.blog-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+@media (max-width: 900px) {
+    .blog-image {
+        display: none;
+    }
 }

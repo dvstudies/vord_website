@@ -8,6 +8,21 @@ const blogModules = import.meta.glob(
     { query: "?raw", import: "default", eager: true }
 );
 
+// Load all blog images eagerly so they're bundled with a resolved URL
+const blogImages = import.meta.glob(
+    "../content/blog/imgs/*",
+    { eager: true, import: "default" }
+);
+
+/** Resolve a frontmatter `img: filename.png` to its bundled URL */
+function resolveImage(filename) {
+    if (!filename) return null;
+    const match = Object.entries(blogImages).find(([path]) =>
+        path.endsWith(`/${filename}`)
+    );
+    return match ? match[1] : null;
+}
+
 function loadPosts() {
     return Object.entries(blogModules)
         .map(([, raw]) => {
@@ -16,6 +31,7 @@ function loadPosts() {
                 date: meta.date || "",
                 title: meta.title || "Untitled",
                 location: meta.location || "",
+                img: resolveImage(meta.img),
                 html: parseMarkdown(body),
             };
         })
@@ -74,6 +90,13 @@ export default function Blog() {
                     dangerouslySetInnerHTML={{ __html: post.html }}
                 />
             </article>
+
+            {/* Optional post image, pinned to the bottom-right corner of the section */}
+            {post.img && (
+                <div className="blog-image">
+                    <img src={post.img} alt={post.title} />
+                </div>
+            )}
         </div>
     );
 }
