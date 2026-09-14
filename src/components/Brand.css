@@ -1,8 +1,9 @@
 /* Top-left attribution */
 .brand-attribution {
     position: fixed;
-    top: 20px;
-    left: 20px;
+    top: 0;
+    left: var(--grid-offset-x);
+    padding: var(--in-padding);
     z-index: 2;
     display: flex;
     flex-direction: column;

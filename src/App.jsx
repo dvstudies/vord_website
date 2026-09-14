@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import Grid from "./components/Grid/Grid.jsx";
-import Brand from "./components/Brand.jsx";
+import Landing from "./components/Landing.jsx";
 import Nav from "./components/Nav.jsx";
 import Mission from "./components/Mission.jsx";
 import Blog from "./components/Blog.jsx";
@@ -10,9 +9,6 @@ import "./styles/global.css";
 
 const SECTIONS = ["landing", "mission", "blog", "about"];
 
-// Safety net: if the artwork fetch or image pipeline never resolves (e.g.
-// no network), reveal the rest of the site anyway after this long, so the
-// grid's loading state can never get stuck forever.
 const MAX_LOAD_WAIT_MS = 8000;
 
 export default function App() {
@@ -28,20 +24,17 @@ export default function App() {
                 setArtworkData(data);
             } catch (error) {
                 console.error("Error fetching daily artwork:", error);
-                setLoaded(true); // nothing left to wait on
+                setLoaded(true);
             }
         }
         fetchArtwork();
 
-        // Grid's onLoaded below is what normally reveals the rest of the
-        // site; this is only a fallback in case that never fires.
         const fallback = setTimeout(() => setLoaded(true), MAX_LOAD_WAIT_MS);
 
         function onScroll() {
             const y = window.scrollY;
             setScrollY(y);
 
-            // Determine active section (scan from bottom so last match wins)
             const threshold = window.innerHeight * 0.45;
             let active = "landing";
             for (const id of SECTIONS) {
@@ -64,33 +57,29 @@ export default function App() {
         document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     }
 
-    const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-    const canvasOpacity = Math.max(0.2, 1 - scrollY / (vh * 0.7));
-    const brandOpacity = Math.max(0.2, 1 - scrollY / (vh * 0.35));
-
     return (
         <div className="app">
-            <Grid
-                artwork={artwork}
-                opacity={canvasOpacity}
-                onLoaded={() => setLoaded(true)}
-            />
-
-            <Brand opacity={brandOpacity} />
-
             {loaded && (
-                <>
-                    <Nav
-                        activeSection={activeSection}
-                        onNavigate={scrollToSection}
+                <Nav
+                    activeSection={activeSection}
+                    onNavigate={scrollToSection}
+                />
+            )}
+
+            <div className="sections">
+                <section
+                    id="landing"
+                    className="section section--landing"
+                >
+                    <Landing
+                        artwork={artwork}
+                        scrollY={scrollY}
+                        setLoaded={setLoaded}
                     />
+                </section>
 
-                    <div className="sections">
-                        <section
-                            id="landing"
-                            className="section section--landing"
-                        />
-
+                {loaded && (
+                    <>
                         <section
                             id="mission"
                             className="section section--sticky section--w"
@@ -100,7 +89,7 @@ export default function App() {
 
                         <section
                             id="blog"
-                            className="section section--sticky section--b"
+                            className="section section--carousel section--b"
                         >
                             <Blog />
                         </section>
@@ -111,9 +100,9 @@ export default function App() {
                         >
                             <About />
                         </section>
-                    </div>
-                </>
-            )}
+                    </>
+                )}
+            </div>
         </div>
     );
 }

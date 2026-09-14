@@ -16,16 +16,15 @@ import { now, easeOutCubic } from "./mathUtils.js";
 
 const CELL_SIZE = 72;
 
-// The loading state always stays up at least this long, even if the
-// artwork/image pipeline behind it finishes sooner — long enough to read
-// as an intentional loading beat rather than a flicker.
 const MIN_LOADING_MS = 2000;
-
-// How long the crossfade from the loading grid to the loaded artwork
-// takes, once it starts.
 const TRANSITION_MS = 900;
 
-export default function Grid({ artwork, opacity = 1, onLoaded }) {
+export default function Grid({
+    artwork,
+    opacity = 1,
+    enabled = true,
+    onLoaded,
+}) {
     const canvasRef = useRef(null);
     const mountedAtRef = useRef(now());
     const stateRef = useRef({
@@ -63,8 +62,7 @@ export default function Grid({ artwork, opacity = 1, onLoaded }) {
                     1,
                     (now() - state.transitionStart) / TRANSITION_MS,
                 );
-                // The loading grid stays as the base coat; the artwork
-                // crossfades in on top of it rather than cutting in.
+
                 drawLoadingScene(ctx, state);
                 drawLoadedScene(ctx, state, easeOutCubic(progress));
 
@@ -78,11 +76,6 @@ export default function Grid({ artwork, opacity = 1, onLoaded }) {
             drawLoadedScene(ctx, state);
         }
 
-        // While loading (and during the crossfade into the loaded scene),
-        // the grid animates on its own regardless of pointer input, so it
-        // needs a continuous loop. Once fully loaded, rendering only
-        // changes in response to pointer events, so the loop stops
-        // itself to save cycles.
         function loop() {
             render();
             state.frame =
@@ -106,9 +99,6 @@ export default function Grid({ artwork, opacity = 1, onLoaded }) {
             layout();
             startLoop();
 
-            // Artwork hasn't arrived yet (e.g. the daily-artwork fetch is
-            // still in flight) — keep showing the loading fx and wait for
-            // the effect to rerun once it does.
             if (!artwork || !artwork.imageUrl) return;
 
             const image = await loadImage(artwork.imageUrl);
@@ -137,13 +127,16 @@ export default function Grid({ artwork, opacity = 1, onLoaded }) {
             clearTimeout(state.resizeTimer);
             state.resizeTimer = setTimeout(async () => {
                 const needsRebuild =
-                    (state.phase === "loaded" || state.phase === "transitioning") &&
+                    (state.phase === "loaded" ||
+                        state.phase === "transitioning") &&
                     artwork?.imageUrl;
                 layout();
 
                 if (!needsRebuild) return;
 
-                const image = await loadImage(artwork.imageUrl).catch(() => null);
+                const image = await loadImage(artwork.imageUrl).catch(
+                    () => null,
+                );
                 if (cancelled || !image) return;
                 state.loadedLayers = buildLoadedLayers(
                     image,
@@ -166,7 +159,6 @@ export default function Grid({ artwork, opacity = 1, onLoaded }) {
         }
 
         load().catch((error) => {
-            console.error("Grid load failed:", error);
             if (cancelled) return;
             state.phase = "loaded";
             onLoaded?.();
@@ -194,7 +186,12 @@ export default function Grid({ artwork, opacity = 1, onLoaded }) {
         <canvas
             ref={canvasRef}
             className="grid-canvas"
-            style={{ opacity, transition: "opacity 0.15s linear" }}
+            style={{
+                opacity,
+                transition: "opacity 0.15s linear",
+                pointerEvents: enabled ? "auto" : "none",
+                display: enabled ? "block" : "none",
+            }}
             aria-hidden="true"
         />
     );
@@ -202,14 +199,14 @@ export default function Grid({ artwork, opacity = 1, onLoaded }) {
 
 function resizeCanvas(canvas, ctx, state) {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    // const width = window.innerWidth;
+    // const height = window.innerHeight;
+    const width = document.documentElement.clientWidth;
+    const height = document.documentElement.clientHeight;
 
     state.width = width;
     state.height = height;
 
-    // Shared metrics — the CSS background grids consume the same numbers
-    // (via the CSS vars published below) so every grid on the site matches.
     const { cellSize, rows, cols, offsetX } = computeGridMetrics(
         width,
         height,
@@ -220,6 +217,8 @@ function resizeCanvas(canvas, ctx, state) {
     state.rows = rows;
     state.cols = cols;
     state.offsetX = offsetX;
+
+    console.log("cellSize:", cellSize, "offsetX:", offsetX);
 
     publishGridCssVars({ cellSize, offsetX });
 

@@ -24,12 +24,17 @@ export async function getDailyArtwork(dateString) {
 
         return {
             title: image.title
-                ? image.title.replace(/^File:/, "")
+                ? image.title.replace(/^File:/, "").split(".")[0]
                 : "Picture of the Day",
             imageUrl: image.thumbnail?.source || image.image?.source,
             fullResUrl: image.image?.source,
             description: image.description?.text || "",
             pageUrl: image.file_page,
+            artist: image.artist || "",
+            meta: {
+                artist: image.artist.text || "",
+                title: image.structured.captions.en || image.title || "",
+            },
         };
     } catch (error) {
         console.error("Error executing getDailyArtwork():", error);

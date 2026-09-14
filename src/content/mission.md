@@ -1,4 +1,6 @@
-# Mission
+---
+title: Mission
+---
 
 VORD — Visual Open Research Data — is an initiative of Digital Visual Studies at the University of Zurich dedicated to making visual research data openly accessible, reproducible, and reusable across disciplines.
 

@@ -1,103 +1,89 @@
-import { useState, useMemo } from "react";
-import { parseFrontmatter, parseMarkdown } from "../utils/parseMarkdown.js";
+import { useEffect, useMemo, useRef } from "react";
+import { loadPosts } from "../utils/fetchFiles.jsx";
+import { fmtLong } from "../utils/parseMarkdown.js";
 import "./Blog.css";
-
-const blogModules = import.meta.glob("../content/blog/*.md", {
-    query: "?raw",
-    import: "default",
-    eager: true,
-});
-
-const blogImages = import.meta.glob("../content/blog/imgs/*", {
-    eager: true,
-    import: "default",
-});
-
-function resolveImage(filename) {
-    if (!filename) return null;
-    const match = Object.entries(blogImages).find(([path]) =>
-        path.endsWith(`/${filename}`),
-    );
-    return match ? match[1] : null;
-}
-
-function loadPosts() {
-    return Object.entries(blogModules)
-        .map(([, raw]) => {
-            const { meta, body } = parseFrontmatter(raw);
-            return {
-                date: meta.date || "",
-                title: meta.title || "Untitled",
-                location: meta.location || "",
-                img: resolveImage(meta.img),
-                participants: meta.participants
-                    ? JSON.parse(meta.participants)
-                    : [],
-                html: parseMarkdown(body),
-            };
-        })
-        .sort((a, b) => b.date.localeCompare(a.date));
-}
-
-function fmtShort(dateStr) {
-    if (!dateStr) return "";
-    const [y, m, d] = dateStr.split("-");
-    return `${d}/${m}/${y.slice(2)}`;
-}
-
-function fmtLong(dateStr) {
-    if (!dateStr) return "";
-    const [y, m, d] = dateStr.split("-");
-    return `${d}.${m}.${y}`;
-}
 
 export default function Blog() {
     const posts = useMemo(loadPosts, []);
-    const [activeIdx, setActiveIdx] = useState(0);
-    const post = posts[activeIdx];
-    if (!post) return null;
+    const scrollerRef = useRef(null);
+    const trackRef = useRef(null);
+
+    useEffect(() => {
+        const scroller = scrollerRef.current;
+        const track = trackRef.current;
+        if (!scroller || !track || posts.length === 0) return;
+
+        let raf = 0;
+
+        function update() {
+            raf = 0;
+            const rect = scroller.getBoundingClientRect();
+            const vh = window.innerHeight;
+            const scrollable = rect.height - vh;
+            const progress =
+                scrollable > 0
+                    ? Math.min(1, Math.max(0, -rect.top / scrollable))
+                    : 0;
+            const shift = progress * (posts.length - 1) * window.innerWidth;
+            track.style.transform = `translate3d(${-shift}px, 0, 0)`;
+        }
+
+        function onScrollOrResize() {
+            if (raf) return;
+            raf = requestAnimationFrame(update);
+        }
+
+        update();
+        window.addEventListener("scroll", onScrollOrResize, {
+            passive: true,
+        });
+        window.addEventListener("resize", onScrollOrResize);
+        return () => {
+            if (raf) cancelAnimationFrame(raf);
+            window.removeEventListener("scroll", onScrollOrResize);
+            window.removeEventListener("resize", onScrollOrResize);
+        };
+    }, [posts.length]);
+
+    if (posts.length === 0) return null;
 
     return (
-        <div className="blog">
-            {/* Date sidebar */}
-            <aside className="blog-sidebar">
-                {posts.map((p, i) => (
-                    <button
-                        key={p.date + i}
-                        className={`blog-date-btn${i === activeIdx ? " blog-date-btn--active" : ""}`}
-                        onClick={() => setActiveIdx(i)}
-                    >
-                        {fmtShort(p.date)}
-                    </button>
-                ))}
-            </aside>
-
-            {/* Article */}
-            <article className="blog-article">
-                <header className="blog-article-header">
-                    <h1 className="blog-article-title">{post.title}</h1>
-                    <p className="blog-article-meta">
-                        <em>
-                            {fmtLong(post.date)}
-                            {post.location ? ` — ${post.location}` : ""}
-                        </em>
-                    </p>
-                </header>
+        <div
+            className="blog-scroller"
+            ref={scrollerRef}
+            style={{ height: `${posts.length * 100}dvh` }}
+        >
+            <div className="blog-sticky">
                 <div
-                    className="blog-article-body"
-                    dangerouslySetInnerHTML={{ __html: post.html }}
-                />
-            </article>
-
-            {/* Image*/}
-            {post.img && (
-                <div className="blog-image">
-                    <img
-                        src={post.img}
-                        alt={post.title}
-                    />
+                    className="blog-track"
+                    ref={trackRef}
+                >
+                    {posts.map((post, i) => (
+                        <article
+                            className="post  section--b"
+                            key={post.date + i}
+                        >
+                            <div className="header">
+                                <h1>{post.title}</h1>
+                            </div>
+                            <div className="header sub b">
+                                <p className="t-code">
+                                    <em>
+                                        {fmtLong(post.date)}
+                                        {post.location
+                                            ? ` — ${post.location}`
+                                            : ""}
+                                    </em>
+                                </p>
+                            </div>
+                            <div
+                                className="content-body shorter b"
+                                dangerouslySetInnerHTML={{ __html: post.html }}
+                            />
+                        </article>
+                    ))}
                 </div>
-            )}
+            </div>
         </div>
     );
 }

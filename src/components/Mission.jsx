@@ -3,13 +3,16 @@ import { parseFrontmatter, parseMarkdown } from "../utils/parseMarkdown.js";
 import "./Mission.css";
 
 export default function Mission() {
-    const { body } = parseFrontmatter(missionMd);
+    const { meta, body } = parseFrontmatter(missionMd);
     const html = parseMarkdown(body);
 
     return (
-        <div className="mission">
+        <div>
+            <div className="header">
+                <h1>{meta.title}</h1>
+            </div>
             <div
-                className="mission-body"
+                className="content-body w"
                 dangerouslySetInnerHTML={{ __html: html }}
             />
         </div>

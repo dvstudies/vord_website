@@ -1,0 +1,28 @@
+#credits {
+    position: fixed;
+    z-index: 2;
+    right: calc(var(--grid-size) * 2 + var(--grid-offset-x));
+    bottom: calc(var(--grid-size) * 1);
+    height: calc(var(--grid-size) * 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    pointer-events: none;
+    text-align: right;
+}
+
+#news {
+    position: fixed;
+    z-index: 2;
+    left: calc(var(--grid-size) * 2 + var(--grid-offset-x));
+    top: calc(var(--grid-size) * 2);
+    width: calc(var(--grid-size) * 6);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    max-height: calc(var(--grid-size) * 8);
+
+    overflow: hidden;
+}

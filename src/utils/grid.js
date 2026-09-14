@@ -13,13 +13,22 @@
 // from this same function so they always line up with each other.
 export const BASE_CELL_SIZE = 72;
 
-export function computeGridMetrics(width, height, baseCellSize = BASE_CELL_SIZE) {
+export function computeGridMetrics(
+    width,
+    height,
+    baseCellSize = BASE_CELL_SIZE,
+) {
     const rows = Math.max(1, Math.round(height / baseCellSize));
     const cellSize = height / rows;
     const cols = Math.max(1, Math.floor(width / cellSize));
     const offsetX = (width - cols * cellSize) / 2;
 
-    return { cellSize, rows, cols, offsetX };
+    return {
+        cellSize: Math.round(cellSize),
+        rows,
+        cols,
+        offsetX: Math.round(offsetX),
+    };
 }
 
 // Publishes the current grid metrics as CSS custom properties on the root
@@ -80,7 +89,10 @@ export function makeGridCells(width, height, cellSize, offsetX, rows, cols) {
 // Draws the grid lines for a given layout — used by every canvas grid on
 // the site (the loading-state and loaded-state renderers in
 // components/Grid/) so the lines always render identically between them.
-export function drawGridLines(ctx, { width, height, cellSize, rows, cols, offsetX }) {
+export function drawGridLines(
+    ctx,
+    { width, height, cellSize, rows, cols, offsetX },
+) {
     ctx.save();
     ctx.filter = "none";
     ctx.globalAlpha = 1;
