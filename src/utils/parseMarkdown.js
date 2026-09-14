@@ -10,20 +10,62 @@ export function fmtLong(dateStr) {
     return `${d}.${m}.${y}`;
 }
 
+function bracketDelta(str) {
+    let depth = 0;
+    for (const ch of str) {
+        if (ch === "[" || ch === "{") depth++;
+        else if (ch === "]" || ch === "}") depth--;
+    }
+    return depth;
+}
+
 export function parseFrontmatter(raw) {
     const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
     if (!match) return { meta: {}, body: raw };
 
     const meta = {};
-    match[1].split(/\r?\n/).forEach((line) => {
-        const colon = line.indexOf(":");
-        if (colon === -1) return;
-        const key = line.slice(0, colon).trim();
-        const value = line.slice(colon + 1).trim();
-        if (key) meta[key] = value;
-    });
+    const lines = match[1].split(/\r?\n/);
+    let i = 0;
+    while (i < lines.length) {
+        const line = lines[i];
+        const keyMatch = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+        if (!keyMatch) {
+            i++;
+            continue;
+        }
+
+        const key = keyMatch[1];
+        let value = keyMatch[2];
+        let depth = bracketDelta(value);
+        let started = /[[{]/.test(value);
+        let j = i + 1;
+
+        // A value that opens a [ ] or { } block — whether it opens on this
+        // line or the next — keeps consuming lines until the block closes.
+        // This lets fields like `participants` span multiple lines in the
+        // frontmatter instead of being forced onto one line.
+        while (
+            j < lines.length &&
+            (depth > 0 || (!started && /^\s*[[{]/.test(lines[j])))
+        ) {
+            value += "\n" + lines[j];
+            depth += bracketDelta(lines[j]);
+            if (/[[{]/.test(lines[j])) started = true;
+            j++;
+        }
+
+        meta[key] = value.trim();
+        i = j;
+    }
 
     return { meta, body: match[2] };
+}
+
+// Frontmatter arrays/objects are hand-edited JSON-ish values; tolerate
+// trailing commas (invalid per strict JSON, but easy to leave behind when
+// reformatting a multi-line block by hand or via an editor/formatter).
+export function parseJSONLoose(str) {
+    return JSON.parse(str.replace(/,(\s*[\]}])/g, "$1"));
 }
 
 export function parseMarkdown(md) {

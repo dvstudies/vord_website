@@ -1,0 +1,37 @@
+/* One pinned stack that holds every "covering" section on the site —
+   Mission, each blog post, and About. All of the actual sliding is a
+   `transform` applied per-slide from useStackScroll.js; this file only
+   lays out the pinning and the themed background each slide sits on. */
+
+.stack {
+    position: relative;
+    width: 100%;
+    z-index: 2;
+    pointer-events: auto;
+}
+
+.stack-viewport {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.stack-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    /* box-shadow: 0px -5px 50px rgb(37, 0, 250); */
+    box-shadow:
+        -5px -5px 50px rgba(255, 255, 255, 0.1),
+        0px 0px 5px rgba(255, 255, 255, 0.5);
+    /* box-shadow: 0px -5px 50px rgba(0, 0, 0, 0.2); */
+}

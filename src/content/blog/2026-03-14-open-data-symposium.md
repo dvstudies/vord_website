@@ -1,6 +1,6 @@
 ---
 date: 2026-03-14
-title: Open Data Symposium
+title: O.D. Symposium
 location: Kunsthaus Zürich, Zurich
 participants: []
 ---

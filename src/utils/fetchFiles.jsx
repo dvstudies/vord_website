@@ -1,4 +1,4 @@
-import { parseFrontmatter, parseMarkdown } from "./parseMarkdown.js";
+import { parseFrontmatter, parseMarkdown, parseJSONLoose } from "./parseMarkdown.js";
 
 const blogModules = import.meta.glob("../content/blog/*.md", {
     query: "?raw",
@@ -25,6 +25,16 @@ function resolveImage(filename) {
     return match ? match[1] : null;
 }
 
+function parseParticipants(raw) {
+    if (!raw) return [];
+    try {
+        return parseJSONLoose(raw);
+    } catch (err) {
+        console.warn("Could not parse `participants` frontmatter:", err, raw);
+        return [];
+    }
+}
+
 export function loadPosts() {
     return Object.entries(blogModules)
         .map(([, raw]) => {
@@ -34,13 +44,11 @@ export function loadPosts() {
                 title: meta.title || "Untitled",
                 location: meta.location || "",
                 img: resolveImage(meta.img),
-                participants: meta.participants
-                    ? JSON.parse(meta.participants)
-                    : [],
+                participants: parseParticipants(meta.participants),
                 html: parseMarkdown(body),
             };
         })
-        .sort((a, b) => b.date.localeCompare(a.date));
+        .sort((a, b) => a.date.localeCompare(b.date));
 }
 
 export function loadNews() {}

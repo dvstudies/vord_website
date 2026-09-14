@@ -3,7 +3,24 @@ date: 2026-09-27
 title: Second Workshop
 location: University of Zurich, Zurich
 img: workshop.png
-participants: [{"name": "Ana Zapata Guzman", "affiliation": "Digital Visual Studies"}, {"name": "Iacopo Neri", "affiliation": "Digital Visual Studies"}]
+participants:
+    [
+        {
+            "name": "Giovanna Targia",
+            "affiliation": "Kunsthistorisches Institut",
+        },
+        { "name": "Stephanie Santschi", "affiliation": "Universitat Zürich" },
+        { "name": "Martina Diaz", "affiliation": "ETH" },
+        {
+            "name": "Dario Negueruela del Castillo",
+            "affiliation": "Digital Visual Studies",
+        },
+        { "name": "Iacopo Neri", "affiliation": "Digital Visual Studies" },
+        {
+            "name": "Ana Zapata Guzman",
+            "affiliation": "Digital Visual Studies",
+        },
+    ]
 ---
 
 The first VORD workshop brought together researchers, curators, and digital humanists from across Europe to explore shared challenges in visual data publication.

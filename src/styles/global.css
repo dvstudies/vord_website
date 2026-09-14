@@ -61,8 +61,9 @@ body {
     width: 100%;
     min-height: 100dvh;
     pointer-events: auto;
-    box-shadow: 0px -5px 50px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0px -5px 10px rgba(0, 0, 0, 1); */
 
+    box-shadow: 0px -5px 50px rgb(250, 0, 0);
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
@@ -73,22 +74,6 @@ body {
     background: transparent;
     pointer-events: auto;
     z-index: 0;
-}
-
-.section--sticky {
-    position: sticky;
-    top: 0;
-    min-height: 100dvh;
-    z-index: 2;
-}
-
-/* Used by sections that need extra scroll room of their own (e.g. the
-   blog carousel): stays a normal, positioned block — so it still paints
-   over the previous sticky section as you scroll onto it — but its
-   height grows with its content instead of pinning at 100dvh itself. */
-.section--carousel {
-    position: relative;
-    z-index: 2;
 }
 
 .section--w {
@@ -114,7 +99,7 @@ body {
 /* ── Typography section ─────────────────────────── */
 h1 {
     font-family: var(--font-primary);
-    font-size: clamp(64px, 9vw, 128px);
+    font-size: clamp(60px, 8.5vw, 120px);
     font-weight: 400;
     /* line-height: 0.94; */
     /* letter-spacing: -0.04em;
