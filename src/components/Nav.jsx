@@ -8,7 +8,7 @@ export default function Nav({ activeSection, onNavigate }) {
             className="main-nav"
             aria-label="Main navigation"
         >
-            {SECTIONS.map((id) => (
+            {SECTIONS.map((id, i) => (
                 <button
                     key={id}
                     className={`nav-btn${activeSection === id ? " nav-btn--active" : ""}`}
@@ -18,7 +18,8 @@ export default function Nav({ activeSection, onNavigate }) {
                     }}
                     aria-current={activeSection === id ? "page" : undefined}
                 >
-                    {id.charAt(0).toUpperCase() + id.slice(1)}
+                    {/* {id.charAt(0).toUpperCase() + id.slice(1)} */}
+                    {i}
                 </button>
             ))}
         </nav>

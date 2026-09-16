@@ -54,7 +54,7 @@ function News({}) {
     return (
         <div id="news">
             <div
-                className="cell clickable b"
+                className="cell h1u clickable b"
                 onClick={() => setOpen(!open)}
             >
                 <h2>News // News // News</h2>

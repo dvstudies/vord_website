@@ -25,22 +25,42 @@ export default function Blog({ post }) {
             <div className="participants">
                 {post.participants?.length > 0 && (
                     <>
-                        <div className="cell b">
-                            <h2>Participants</h2>
+                        <div className="cell h1u b">
+                            <h2>
+                                Participants // Participants // Participants
+                            </h2>
                         </div>
                         <div className="cell b">
-                            {post.participants.map((participant, i) => (
-                                <p>
-                                    {participant.name} <br />
-                                    <span className="t-code">
-                                        {participant.affiliation}
-                                    </span>
-                                </p>
-                            ))}
+                            <p>
+                                {post.participants.map((participant, i) => (
+                                    <>
+                                        {participant.name} {/* <br /> */}
+                                        {" / "}
+                                        <span className="t-code">
+                                            {participant.affiliation}
+                                        </span>
+                                        <hr />
+                                    </>
+                                ))}
+                            </p>
                         </div>
                     </>
                 )}
             </div>
+
+            {post.img && (
+                <div className="img">
+                    <img
+                        src={post.img}
+                        alt={post.title}
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                        }}
+                    />
+                </div>
+            )}
         </article>
     );
 }

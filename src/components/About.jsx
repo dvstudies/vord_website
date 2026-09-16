@@ -3,13 +3,16 @@ import { parseFrontmatter, parseMarkdown } from "../utils/parseMarkdown.js";
 import "./About.css";
 
 export default function About() {
-    const { body } = parseFrontmatter(aboutMd);
+    const { meta, body } = parseFrontmatter(aboutMd);
     const html = parseMarkdown(body);
 
     return (
-        <div className="about">
+        <div>
+            <div className="header">
+                <h1>{meta.title}</h1>
+            </div>
             <div
-                className="about-body"
+                className="content-body full-w b"
                 dangerouslySetInnerHTML={{ __html: html }}
             />
         </div>

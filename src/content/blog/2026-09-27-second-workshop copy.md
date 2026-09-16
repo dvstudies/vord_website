@@ -11,15 +11,9 @@ participants:
         },
         { "name": "Stephanie Santschi", "affiliation": "Universitat Zürich" },
         { "name": "Martina Diaz", "affiliation": "ETH" },
-        {
-            "name": "Dario Negueruela del Castillo",
-            "affiliation": "Digital Visual Studies",
-        },
-        { "name": "Iacopo Neri", "affiliation": "Digital Visual Studies" },
-        {
-            "name": "Ana Zapata Guzman",
-            "affiliation": "Digital Visual Studies",
-        },
+        { "name": "Dario Negueruela del Castillo", "affiliation": "MPG - DVS" },
+        { "name": "Iacopo Neri", "affiliation": "MPG - DVS" },
+        { "name": "Ana Zapata Guzman", "affiliation": "MPG - DVS" },
     ]
 ---
 

@@ -16,3 +16,14 @@
 
     overflow: hidden;
 }
+
+.img {
+    position: fixed;
+    right: calc(var(--grid-size) * 4 + var(--grid-offset-x));
+    bottom: calc(var(--grid-size) * 2);
+    width: calc(var(--grid-size) * 6);
+    height: calc(var(--grid-size) * 5);
+
+    overflow: hidden;
+    object-fit: contain;
+}

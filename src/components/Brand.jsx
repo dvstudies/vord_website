@@ -1,6 +1,8 @@
 import "./Brand.css";
 
 export default function Brand({ opacity = 1 }) {
+    const logoUrl = "dvs-svg-uz_bright.png";
+
     return (
         <>
             {/* Top-left attribution */}
@@ -13,7 +15,7 @@ export default function Brand({ opacity = 1 }) {
                 }}
             >
                 <img
-                    src="dvs-svg-uz.png"
+                    src={logoUrl}
                     style={{
                         width: "100%",
                         heigth: "auto",

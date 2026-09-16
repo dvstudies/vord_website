@@ -9,6 +9,7 @@ import { createLoadingScene, drawLoadingScene } from "./loadingScene.js";
 import {
     loadImage,
     buildLoadedLayers,
+    buildIdleCanvas,
     drawLoadedScene,
     pickLayerGroup,
 } from "./loadedScene.js";
@@ -27,6 +28,8 @@ export default function Grid({
 }) {
     const canvasRef = useRef(null);
     const mountedAtRef = useRef(now());
+    const enabledRef = useRef(enabled);
+    const requestStaticDrawRef = useRef(() => {});
     const stateRef = useRef({
         width: 0,
         height: 0,
@@ -38,6 +41,17 @@ export default function Grid({
         loadedLayers: null,
         transitionStart: 0,
     });
+
+    // Kept in sync with the `enabled` prop so the pointer handlers (set up
+    // once below, independent of prop changes) can cheaply check current
+    // enabled-ness without re-subscribing. When the canvas flips back on
+    // (e.g. scrolling back up out of the Mission section) we also force one
+    // redraw so it immediately reflects wherever the cursor actually is,
+    // rather than showing a stale frame from before it was disabled.
+    useEffect(() => {
+        enabledRef.current = enabled;
+        if (enabled) requestStaticDrawRef.current();
+    }, [enabled]);
 
     useEffect(() => {
         let cancelled = false;
@@ -110,6 +124,10 @@ export default function Grid({
                 state.width,
                 state.height,
             );
+            state.loadedLayers.idle = buildIdleCanvas(
+                state.loadedLayers,
+                state,
+            );
 
             const remaining = Math.max(
                 0,
@@ -144,19 +162,38 @@ export default function Grid({
                     state.width,
                     state.height,
                 );
+                state.loadedLayers.idle = buildIdleCanvas(
+                    state.loadedLayers,
+                    state,
+                );
                 render();
             }, 120);
         }
 
+        // Tracked at window/document level rather than on the canvas itself
+        // — the canvas sits under floating UI (the News/Credits overlays,
+        // and later the Mission content) that needs its own click/hover
+        // handling, and a listener on the canvas element stops receiving
+        // events the moment the pointer is over whatever's on top of it.
+        // Reading clientX/clientY globally keeps the cursor coordinate
+        // flowing no matter what's being hovered or clicked, so the canvas
+        // interaction never appears to "freeze" under those elements.
+        // `enabledRef` gates the actual redraw so this stays free once the
+        // canvas has been scroll-disabled (see the enabled sync effect
+        // above) instead of doing pointless work while it's not visible.
         function onPointerMove(event) {
             state.pointer = { x: event.clientX, y: event.clientY };
+            if (!enabledRef.current) return;
             requestStaticDraw();
         }
 
         function onPointerLeave() {
             state.pointer = null;
+            if (!enabledRef.current) return;
             requestStaticDraw();
         }
+
+        requestStaticDrawRef.current = requestStaticDraw;
 
         load().catch((error) => {
             if (cancelled) return;
@@ -165,14 +202,19 @@ export default function Grid({
         });
 
         window.addEventListener("resize", onResize);
-        canvas.addEventListener("pointermove", onPointerMove);
-        canvas.addEventListener("pointerleave", onPointerLeave);
+        window.addEventListener("pointermove", onPointerMove);
+        // pointerleave doesn't bubble, but attached directly to `document`
+        // it fires when the pointer leaves the browser viewport entirely —
+        // exactly the "cursor left the page" case the canvas should treat
+        // as no pointer at all.
+        document.addEventListener("pointerleave", onPointerLeave);
 
         return () => {
             cancelled = true;
+            requestStaticDrawRef.current = () => {};
             window.removeEventListener("resize", onResize);
-            canvas.removeEventListener("pointermove", onPointerMove);
-            canvas.removeEventListener("pointerleave", onPointerLeave);
+            window.removeEventListener("pointermove", onPointerMove);
+            document.removeEventListener("pointerleave", onPointerLeave);
             if (state.frame) {
                 cancelAnimationFrame(state.frame);
                 state.frame = null;
@@ -217,8 +259,6 @@ function resizeCanvas(canvas, ctx, state) {
     state.rows = rows;
     state.cols = cols;
     state.offsetX = offsetX;
-
-    console.log("cellSize:", cellSize, "offsetX:", offsetX);
 
     publishGridCssVars({ cellSize, offsetX });
 
