@@ -34,7 +34,7 @@ const SNAP_SETTLE_MS = 500;
 // that slide counts as "entered" — see SlideEnteredContext. Higher
 // than the >0 used for `activeIdx` so content inside a slide (title,
 // participants list, ...) doesn't fire while it's still mid-cover.
-const ENTER_THRESHOLD = 0.5;
+const ENTER_THRESHOLD = 0.1;
 
 export function useStackScroll(slides, { onActiveChange } = {}) {
     const stageRef = useRef(null);

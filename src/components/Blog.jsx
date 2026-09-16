@@ -1,5 +1,7 @@
+import { Fragment } from "react";
 import { fmtLong } from "../utils/parseMarkdown.js";
 import { useSlideEntered } from "../hooks/SlideEnteredContext.jsx";
+import { useLatchedTrue } from "../hooks/useLatchedTrue.js";
 import LoopXButton from "./LoopXButton.jsx";
 import SlidingY from "./SlidingY.jsx";
 
@@ -7,12 +9,14 @@ import "./Blog.css";
 
 export default function Blog({ post }) {
     const entered = useSlideEntered();
+    const isOpen = useLatchedTrue(entered);
+
     if (!post) return null;
 
     return (
         <article className="post">
             <div className={`header`}>
-                <div className={`sliding-x${entered ? " is-visible" : ""}`}>
+                <div className={`sliding-x${isOpen ? " is-visible" : ""}`}>
                     <h1>{post.title}</h1>
                 </div>
             </div>
@@ -41,14 +45,14 @@ export default function Blog({ post }) {
                         <div className="cell b">
                             <p>
                                 {post.participants.map((participant, i) => (
-                                    <>
+                                    <Fragment key={i}>
                                         {participant.name} {/* <br /> */}
                                         {" / "}
                                         <span className="t-code">
                                             {participant.affiliation}
                                         </span>
                                         <hr />
-                                    </>
+                                    </Fragment>
                                 ))}
                             </p>
                         </div>

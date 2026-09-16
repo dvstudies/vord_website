@@ -60,6 +60,10 @@ body {
 
 .clickable {
     cursor: pointer;
+    filter: invert(0);
+}
+
+.clickable:hover {
 }
 
 /* ── Scrollable section stack ─────────────────────────── */
@@ -195,6 +199,7 @@ p {
     padding: 0 var(--in-padding);
     overflow-y: auto;
     border: 1px solid rgba(0, 0, 0, 0.15);
+    bottom: calc(var(--grid-size) * 2);
 }
 
 .content-body.shorter {
