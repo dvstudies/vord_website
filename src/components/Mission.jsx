@@ -1,20 +1,28 @@
 import missionMd from "../content/mission.md?raw";
 import { parseFrontmatter, parseMarkdown } from "../utils/parseMarkdown.js";
+import { useSlideEntered } from "../hooks/SlideEnteredContext.jsx";
+import SlidingY from "./SlidingY.jsx";
+
 import "./Mission.css";
 
 export default function Mission() {
     const { meta, body } = parseFrontmatter(missionMd);
     const html = parseMarkdown(body);
+    const entered = useSlideEntered();
 
     return (
         <div>
-            <div className="header">
-                <h1>{meta.title}</h1>
+            <div className={`header`}>
+                <div className={`sliding-x${entered ? " is-visible" : ""}`}>
+                    <h1>{meta.title}</h1>
+                </div>
             </div>
-            <div
-                className="content-body w"
-                dangerouslySetInnerHTML={{ __html: html }}
-            />
+            <SlidingY open={entered}>
+                <div
+                    className="content-body w"
+                    dangerouslySetInnerHTML={{ __html: html }}
+                />
+            </SlidingY>
         </div>
     );
 }

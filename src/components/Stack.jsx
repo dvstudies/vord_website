@@ -1,11 +1,13 @@
 import { forwardRef, useImperativeHandle } from "react";
 import { useStackScroll } from "../hooks/useStackScroll.js";
+import { SlideEnteredProvider } from "../hooks/SlideEnteredContext.jsx";
 import "./Stack.css";
 
 const Stack = forwardRef(function Stack({ slides, onActiveChange }, ref) {
-    const { stageRef, slideRefs, scrollToId } = useStackScroll(slides, {
-        onActiveChange,
-    });
+    const { stageRef, slideRefs, scrollToId, enteredId } = useStackScroll(
+        slides,
+        { onActiveChange },
+    );
 
     useImperativeHandle(ref, () => ({ scrollToId }), [scrollToId]);
 
@@ -26,7 +28,9 @@ const Stack = forwardRef(function Stack({ slides, onActiveChange }, ref) {
                         ref={(el) => (slideRefs.current[i] = el)}
                         style={{ zIndex: i + 1 }}
                     >
-                        {slide.render()}
+                        <SlideEnteredProvider value={enteredId === slide.id}>
+                            {slide.render()}
+                        </SlideEnteredProvider>
                     </div>
                 ))}
             </div>

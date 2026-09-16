@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import Grid from "./Grid/Grid.jsx";
 import Brand from "./Brand.jsx";
+import LoopXButton from "./LoopXButton.jsx";
+import SlidingY from "./SlidingY.jsx";
 import { parseFrontmatter, parseMarkdown } from "../utils/parseMarkdown.js";
 
 import "./Landing.css";
@@ -53,13 +55,13 @@ function News({}) {
     const [open, setOpen] = useState(false);
     return (
         <div id="news">
-            <div
-                className="cell h1u clickable b"
-                onClick={() => setOpen(!open)}
-            >
-                <h2>News // News // News</h2>
-            </div>
-            {open && (
+            <LoopXButton
+                text="News"
+                className="cell h1u b"
+                onClick={() => setOpen((v) => !v)}
+                aria-expanded={open}
+            />
+            <SlidingY open={open}>
                 <div className="cell scrollable">
                     <p>
                         We are looking for historians and collaborators to join
@@ -80,7 +82,7 @@ function News({}) {
                         and events related to our project.
                     </p>
                 </div>
-            )}
+            </SlidingY>
         </div>
     );
 }

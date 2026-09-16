@@ -1,20 +1,27 @@
 import aboutMd from "../content/about.md?raw";
 import { parseFrontmatter, parseMarkdown } from "../utils/parseMarkdown.js";
+import { useSlideEntered } from "../hooks/SlideEnteredContext.jsx";
+import SlidingY from "./SlidingY.jsx";
 import "./About.css";
 
 export default function About() {
     const { meta, body } = parseFrontmatter(aboutMd);
     const html = parseMarkdown(body);
+    const entered = useSlideEntered();
 
     return (
         <div>
-            <div className="header">
-                <h1>{meta.title}</h1>
+            <div className={`header`}>
+                <div className={`sliding-x${entered ? " is-visible" : ""}`}>
+                    <h1>{meta.title}</h1>
+                </div>
             </div>
-            <div
-                className="content-body full-w b"
-                dangerouslySetInnerHTML={{ __html: html }}
-            />
+            <SlidingY open={entered}>
+                <div
+                    className="content-body full-w b"
+                    dangerouslySetInnerHTML={{ __html: html }}
+                />
+            </SlidingY>
         </div>
     );
 }

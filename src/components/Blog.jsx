@@ -1,13 +1,20 @@
 import { fmtLong } from "../utils/parseMarkdown.js";
+import { useSlideEntered } from "../hooks/SlideEnteredContext.jsx";
+import LoopXButton from "./LoopXButton.jsx";
+import SlidingY from "./SlidingY.jsx";
+
 import "./Blog.css";
 
 export default function Blog({ post }) {
+    const entered = useSlideEntered();
     if (!post) return null;
 
     return (
         <article className="post">
-            <div className="header">
-                <h1>{post.title}</h1>
+            <div className={`header`}>
+                <div className={`sliding-x${entered ? " is-visible" : ""}`}>
+                    <h1>{post.title}</h1>
+                </div>
             </div>
             <div className="header sub b">
                 <p className="t-code">
@@ -17,19 +24,20 @@ export default function Blog({ post }) {
                     </em>
                 </p>
             </div>
-            <div
-                className="content-body shorter b"
-                dangerouslySetInnerHTML={{ __html: post.html }}
-            />
+            <SlidingY open={entered}>
+                <div
+                    className="content-body shorter b"
+                    dangerouslySetInnerHTML={{ __html: post.html }}
+                />
+            </SlidingY>
 
             <div className="participants">
                 {post.participants?.length > 0 && (
                     <>
-                        <div className="cell h1u b">
-                            <h2>
-                                Participants // Participants // Participants
-                            </h2>
-                        </div>
+                        <LoopXButton
+                            text="Participants"
+                            className="cell h1u b"
+                        />
                         <div className="cell b">
                             <p>
                                 {post.participants.map((participant, i) => (

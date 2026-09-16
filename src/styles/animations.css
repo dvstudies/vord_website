@@ -1,0 +1,125 @@
+:root {
+    --slide-y-duration: 0.6s;
+    --slide-x-duration: 0.75s;
+    --slide-x-delay: 0.15s;
+    --ease-slide: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.loop-x {
+    overflow: hidden;
+}
+
+.loop-x-track {
+    display: flex;
+    flex-wrap: nowrap;
+    width: max-content;
+    animation: loop-x-scroll var(--loop-x-duration, 0s) linear infinite;
+    will-change: transform;
+}
+
+.loop-x:hover .loop-x-track,
+.loop-x:focus-within .loop-x-track {
+    animation-play-state: paused;
+}
+
+.loop-x-unit {
+    flex: none;
+    white-space: pre;
+}
+
+@keyframes loop-x-scroll {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        transform: translate3d(calc(-1 * var(--loop-x-unit-width, 0px)), 0, 0);
+    }
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.sliding-y {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--slide-y-duration) var(--ease-slide);
+    z-index: 0;
+    overflow: hidden;
+}
+
+.sliding-y.is-open {
+    grid-template-rows: 1fr;
+}
+
+.sliding-y.sliding-y > * {
+    overflow: hidden;
+    min-height: 0;
+    transform: translateY(-14px);
+    transition: transform var(--slide-y-duration) var(--ease-slide);
+}
+
+.sliding-y.sliding-y.is-open > * {
+    transform: translateY(0);
+}
+
+.sliding-y.sliding-y.is-settled > * {
+    overflow-y: auto;
+}
+
+.sliding-x {
+    display: grid;
+    grid-template-columns: 0fr;
+    transition: grid-template-columns var(--slide-x-duration) var(--ease-slide);
+    /* border-right: 1px solid rgba(0, 0, 0, 0.15); */
+}
+
+.sliding-x.is-visible {
+    grid-template-columns: 1fr;
+    transition-delay: var(--slide-x-delay);
+    /* border-right: none; */
+}
+
+.sliding-x > * {
+    overflow: hidden;
+    min-width: 0;
+    white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .loop-x-track {
+        animation: none;
+    }
+
+    .sliding-y,
+    .sliding-y > *,
+    .sliding-x {
+        transition: none;
+    }
+
+    .sliding-y {
+        grid-template-rows: 1fr;
+    }
+
+    .sliding-y > * {
+        transform: none;
+    }
+
+    /* no transitionend will fire with transitions off, so
+       .is-settled would never arrive — allow scrolling unconditionally */
+    .sliding-y.sliding-y > * {
+        overflow-y: auto;
+    }
+
+    .sliding-x {
+        grid-template-columns: 1fr;
+    }
+}

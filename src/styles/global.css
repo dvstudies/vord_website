@@ -167,6 +167,10 @@ p {
     max-height: var(--grid-size);
 }
 
+.cell.w1u {
+    max-width: var(--grid-size);
+}
+
 .header {
     margin-top: var(--grid-size);
     height: calc(var(--grid-size) * 2);

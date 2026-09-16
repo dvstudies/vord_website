@@ -8,6 +8,7 @@ import Stack from "./components/Stack.jsx";
 import { getDailyArtwork } from "./data/fallbackArtworks.js";
 import { loadPosts } from "./utils/fetchFiles.jsx";
 import "./styles/global.css";
+import "./styles/animations.css";
 
 const MAX_LOAD_WAIT_MS = 48000;
 

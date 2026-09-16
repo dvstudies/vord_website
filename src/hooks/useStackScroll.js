@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * Drives a "stack" of full-viewport slides that all live inside one
@@ -30,11 +30,18 @@ const SNAP_EPSILON = 0.06;
 // How long a programmatic snap scroll is assumed to take, so the
 // scroll events it generates don't get treated as fresh user scrolling.
 const SNAP_SETTLE_MS = 500;
+// How far into a slide's own scroll segment it needs to be before
+// that slide counts as "entered" — see SlideEnteredContext. Higher
+// than the >0 used for `activeIdx` so content inside a slide (title,
+// participants list, ...) doesn't fire while it's still mid-cover.
+const ENTER_THRESHOLD = 0.5;
 
 export function useStackScroll(slides, { onActiveChange } = {}) {
     const stageRef = useRef(null);
     const slideRefs = useRef([]);
     const lastNavId = useRef(undefined);
+    const lastEnteredId = useRef(null);
+    const [enteredId, setEnteredId] = useState(null);
 
     useEffect(() => {
         const stage = stageRef.current;
@@ -63,6 +70,7 @@ export function useStackScroll(slides, { onActiveChange } = {}) {
             const vw = window.innerWidth;
 
             let activeIdx = 0;
+            let settledIdx = 0;
             slideRefs.current.forEach((el, i) => {
                 if (!el || i === 0) return;
                 const segProgress = Math.min(
@@ -70,6 +78,7 @@ export function useStackScroll(slides, { onActiveChange } = {}) {
                     Math.max(0, progress * segments - (i - 1)),
                 );
                 if (segProgress > 0) activeIdx = i;
+                if (segProgress >= ENTER_THRESHOLD) settledIdx = i;
                 const offset = 1 - segProgress;
                 const axis = slides[i].axis;
                 el.style.transform =
@@ -86,6 +95,19 @@ export function useStackScroll(slides, { onActiveChange } = {}) {
             if (navId !== lastNavId.current) {
                 lastNavId.current = navId;
                 onActiveChange?.(navId);
+            }
+
+            // Which single slide currently counts as "entered" — the
+            // topmost one that has settled past ENTER_THRESHOLD. One
+            // shared value for the whole slide (see SlideEnteredContext),
+            // rather than each piece of content inside it watching for
+            // itself.
+            const nextEnteredId = engaged
+                ? (slides[settledIdx]?.id ?? null)
+                : null;
+            if (nextEnteredId !== lastEnteredId.current) {
+                lastEnteredId.current = nextEnteredId;
+                setEnteredId(nextEnteredId);
             }
         }
 
@@ -148,23 +170,26 @@ export function useStackScroll(slides, { onActiveChange } = {}) {
     // Slides are absolutely positioned inside a sticky viewport, so a
     // plain scrollIntoView on them doesn't work; we compute the document
     // scroll position that corresponds to that slide's settle point.
-    const scrollToId = useCallback((navId) => {
-        const stage = stageRef.current;
-        if (!stage) return;
-        const slideList = slides;
-        const index = slideList.findIndex((s) => s.navId === navId);
-        if (index === -1) return;
+    const scrollToId = useCallback(
+        (navId) => {
+            const stage = stageRef.current;
+            if (!stage) return;
+            const slideList = slides;
+            const index = slideList.findIndex((s) => s.navId === navId);
+            if (index === -1) return;
 
-        const segments = Math.max(1, slideList.length - 1);
-        const vh = window.innerHeight;
-        const docTop = stage.getBoundingClientRect().top + window.scrollY;
-        const stageHeight = stage.offsetHeight;
-        const targetProgress = index / segments;
-        const targetY = docTop + targetProgress * (stageHeight - vh);
+            const segments = Math.max(1, slideList.length - 1);
+            const vh = window.innerHeight;
+            const docTop = stage.getBoundingClientRect().top + window.scrollY;
+            const stageHeight = stage.offsetHeight;
+            const targetProgress = index / segments;
+            const targetY = docTop + targetProgress * (stageHeight - vh);
 
-        window.scrollTo({ top: targetY, behavior: "smooth" });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [slides]);
+            window.scrollTo({ top: targetY, behavior: "smooth" });
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        },
+        [slides],
+    );
 
-    return { stageRef, slideRefs, scrollToId };
+    return { stageRef, slideRefs, scrollToId, enteredId };
 }
