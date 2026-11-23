@@ -1,6 +1,6 @@
 import "./Nav.css";
 
-const SECTIONS = ["mission", "blog", "about"];
+const SECTIONS = ["mission", "workshop", "blog", "about"];
 
 export default function Nav({ activeSection, onNavigate }) {
     return (

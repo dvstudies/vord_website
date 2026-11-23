@@ -7,13 +7,15 @@ participants:
     [
         {
             "name": "Giovanna Targia",
-            "affiliation": "Kunsthistorisches Institut",
+            "affiliation": "Universitat Zürich",
         },
         { "name": "Stephanie Santschi", "affiliation": "Universitat Zürich" },
         { "name": "Martina Diaz", "affiliation": "ETH" },
+        { "name": "Golnaz Sarkar Farsi", "affiliation": "Universitat Zürich" },
         { "name": "Dario Negueruela del Castillo", "affiliation": "MPG - DVS" },
         { "name": "Iacopo Neri", "affiliation": "MPG - DVS" },
-        { "name": "Ana Zapata Guzmán", "affiliation": "MPG - DVS" },
+        { "name": "Ana Zapata Guzmán", "affiliation": "MPG - DVS" }
+
     ]
 ---
 

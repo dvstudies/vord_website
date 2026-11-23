@@ -1,7 +1,7 @@
 ---
 date: 2026-06-01
-title: Thinking with Images
-location: Methodology
+title: Methodology
+location: Thinking with Images Workshops
 img: workshop.png
 ---
 

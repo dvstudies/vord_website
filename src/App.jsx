@@ -4,6 +4,7 @@ import Nav from "./components/Nav.jsx";
 import Mission from "./components/Mission.jsx";
 import Blog from "./components/Blog.jsx";
 import About from "./components/About.jsx";
+import Workshop from "./components/Workshop.jsx";
 import Stack from "./components/Stack.jsx";
 import { getDailyArtwork } from "./data/fallbackArtworks.js";
 import { loadPosts } from "./utils/fetchFiles.jsx";
@@ -37,6 +38,13 @@ export default function App() {
                 axis: "vertical",
                 theme: "w",
                 render: () => <Mission />,
+            },
+            {
+                id: "workshop",
+                navId: "workshop",
+                axis: "vertical",
+                theme: "b",
+                render: () => <Workshop />,
             },
             ...blogSlides,
             {

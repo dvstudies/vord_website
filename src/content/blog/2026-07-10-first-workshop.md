@@ -6,7 +6,7 @@ img:
 participants:
     [
         {
-            "name": "Catalina Salguero Palavicino",
+            "name": "Catalina Salguero Palacino",
             "affiliation": "UNIBO",
         },
         { "name": "Dario Negueruela del Castillo", "affiliation": "MPG - DVS" },

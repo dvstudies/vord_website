@@ -18,9 +18,9 @@ export default function About() {
                     <h1>{meta.title}</h1>
                 </div>
             </div>
-            <SlidingY open={true}>
+            <SlidingY open={entered}>
                 <div
-                    className="content-body full-w b"
+                    className="content-body full-w b shorter"
                     dangerouslySetInnerHTML={{ __html: html }}
                 />
             </SlidingY>
