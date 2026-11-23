@@ -53,6 +53,10 @@ function Credits({ artwork }) {
 
 function News({}) {
     const [open, setOpen] = useState(false);
+    const newsMd = Object.values(newsModules)[0] ?? "";
+    const { body } = parseFrontmatter(newsMd);
+    const html = parseMarkdown(body);
+
     return (
         <div id="news">
             <LoopXButton
@@ -62,26 +66,10 @@ function News({}) {
                 aria-expanded={open}
             />
             <SlidingY open={open}>
-                <div className="cell scrollable">
-                    <p>
-                        We are looking for historians and collaborators to join
-                        our second workshop! Stay tuned for more updates and
-                        events related to our project. We are looking for
-                        historians and collaborators to join our second
-                        workshop! Stay tuned for more updates and events related
-                        to our project. We are looking for historians and
-                        collaborators to join our second workshop! Stay tuned
-                        for more updates and events related to our project. We
-                        are looking for historians and collaborators to join our
-                        second workshop! Stay tuned for more updates and events
-                        related to our project. We are looking for historians
-                        and collaborators to join our second workshop! Stay
-                        tuned for more updates and events related to our
-                        project. We are looking for historians and collaborators
-                        to join our second workshop! Stay tuned for more updates
-                        and events related to our project.
-                    </p>
-                </div>
+                <div
+                    className="cell scrollable"
+                    dangerouslySetInnerHTML={{ __html: html }}
+                />
             </SlidingY>
         </div>
     );
