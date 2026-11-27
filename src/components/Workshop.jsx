@@ -1,4 +1,4 @@
-import workshopMd from "../content/workshop.md?raw";
+import workshopMd from "../content/workshop.md?raw"; 
 import { parseFrontmatter, parseMarkdown } from "../utils/parseMarkdown.js";
 import { useSlideEntered } from "../hooks/SlideEnteredContext.jsx";
 import { useLatchedTrue } from "../hooks/useLatchedTrue.js";

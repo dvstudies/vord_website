@@ -30,7 +30,8 @@ Presentation by A. Zapata and D. Negueruela (UZH)
 
 **10:20–11:00** — Roundtable 1: *Questions on Visual Research* 
 
-With Joanna Sleigh (ETH) and more participants to be announced
+Ewa Machotka (UZH), Stephanie Santschi (UZH),
+Joanna Sleigh (ETH) Sonja Gasser (SKKG) and others to be confirmed.
 
 **11:00–11:15** — Coffee & Q&A
 
@@ -45,8 +46,7 @@ Demo: benchmarks, segmentation and retrieval
 **13:00–14:00** — Lunch (catering)
 
 **14:00–15:00** — Roundtable 2: *Evolution, Convergence or Mutation of Disciplines*  
-Moderated by the VORD2 team 
- 
-With Nuria Rodríguez Ortega (University of Málaga), Golnaz Sarkaz Farsi (UZH), Daniel Berndt (UZH) and more participants to be announced
+
+With Nuria Rodríguez Ortega (University of Málaga), Golnaz Sarkar Farsi (UZH), Daniel Berndt (UZH), Alessandra Conti (Art Recognition), and others to be confirmed.
 
 **15:00** — Closing Remarks
